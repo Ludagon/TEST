@@ -2,6 +2,8 @@ var ArrayRegister = new Array();
 var Functions = new Array();
 var position = -1;
 var answer = true;
+var functionsText = "";
+var RegisterText = "";
 
 function SetFunctions(func, name, value, code) {
     var F = {
@@ -10,8 +12,7 @@ function SetFunctions(func, name, value, code) {
         value: value,
         code: code
     }
-    Functions.push(register);
-    position++;
+    Functions.push(F);
 }
 
 function movFunct(name, value) {
@@ -19,30 +20,35 @@ function movFunct(name, value) {
         name: name,
         value: value
     }
-    ArrayRegister.push(register);
+    this.ArrayRegister.push(register);
     this.SetFunctions('mov' + name + value, name, value, 1);
     position++;
+    alert('mov ' + name + value);
 
-    console.log(ArrayRegister);
 }
 
 function Increment(name) {
-    ArrayRegister.find(register => register.name == name).value++;
+    var h = ArrayRegister.find(register => register.name == name).value++;
     SetFunctions('inc' + name, name, 1, 2);
     position++;
+    alert('inc ' + value);
+    alert(h);
 }
 
 function Decrement(name) {
     ArrayRegister.find(register => register.name == name).value--;
     SetFunctions('inc' + name, name, -1, 3);
     position++;
+    alert('dec ' + value);
 }
 
 function Jump(name, value) {
     do {
-        var register = Functions[position + value].registerName;
-        var value = Functions[position + value].value
-        var code = Functions[position + value].code;
+        valor = parseInt(value);
+        var register = Functions[position + valor].registerName;
+        var value = Functions[position + valor].value
+        var code = Functions[position + valor].codef
+        this.SetFunctions('jump' + name + value, name, value, 4);
 
         switch (code) {
             case 1:
@@ -52,12 +58,15 @@ function Jump(name, value) {
                 this.Increment(register)
             case 3:
                 this.Decrement(register)
+            case 4:
+                this.Jump(register, value)
             default:
                 break;
         }
 
     } while (value != 0);
     SetFunctions('jnz' + name + value, name, value, 4);
+    alert('jump ' + name + value);
 }
 
 while (answer) {
@@ -81,7 +90,7 @@ while (answer) {
             alert("a jump that points another jump will cause an infinite loop")
             var register = prompt("Please introduce a register");
             var value = prompt("Please introduce a value (positive means forward, negative means backward");
-            this.Jump(regsiter, value);
+            this.Jump(register, value);
             break;
         default:
             break;
@@ -90,11 +99,15 @@ while (answer) {
 
     if (textAnswer == 'no') {
         answer = false;
+        for (let element in Functions) {
+            functionsText += Functions[element].name + ' ';
+            debugger;
+        }
+        for (let element in ArrayRegister) {
+            RegisterText += ArrayRegister[element].name + ' ' + ArrayRegister[element].value + ' ';
+            debugger;
+        }
+        alert(functionsText);
+        alert(RegisterText)
     }
-
-    let functionsText = '';
-    Functions.forEach(element => {
-        functionsText += element.name
-    });
-    prompt(functionsText);
 }
