@@ -42,14 +42,17 @@ function Decrement(name) {
     alert('dec ' + value);
 }
 
-function Jump(name, value) {
+function Jump(name, value1) {
+    this.SetFunctions('jump' + name + value, name, value, 4);
     do {
-        valor = parseInt(value);
+        valor = parseInt(value1);
         var register = Functions[position + valor].registerName;
-        var value = Functions[position + valor].value
+        var value = ArrayRegister[position + valor].value
         var code = Functions[position + valor].codef
-        this.SetFunctions('jump' + name + value, name, value, 4);
 
+        alert(register);
+        alert(value);
+        alert(code);
         switch (code) {
             case 1:
                 this.movFunct(register, value)
